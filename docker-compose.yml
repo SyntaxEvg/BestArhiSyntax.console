@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  frontangular:
+    image: ${DOCKER_REGISTRY-}frontangular
+    build:
+      context: .
+      dockerfile: FrontAngular/Dockerfile

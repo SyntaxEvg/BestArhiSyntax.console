@@ -1,12 +1,17 @@
-﻿using App.DDD.Domain.Base.EntityBase;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace App.DDD.Domain.Models
 {
+
+
+
+
+    [Table("Employees")]
     public class Employees : EntityName
     {
-        public string LastName { get; set; }
-        public string Patronymic { get; set; }
-        public string Surname { get; set; }
+        [Column("LastName")] public string LastName { get; set; }
+        [Column("Patronymic")] public string Patronymic { get; set; }
+        [Column("Surname")] public string Surname { get; set; }
 
     }
 }

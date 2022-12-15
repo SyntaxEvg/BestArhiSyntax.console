@@ -1,9 +1,46 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="MassTransit" Version="8.0.9" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.11" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.11" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.11" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="6.0.11" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="6.0.11" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.11">
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.11" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.11" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.11" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.11">
+		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="6.0.11" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.11" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="6.0.11" />
+		<PackageReference Include="System.Reactive" Version="5.0.0" />
+		<PackageReference Include="System.Reactive.Linq" Version="5.0.0" />
+	</ItemGroup>
+
+
+
+	<ItemGroup>
+		<ProjectReference Include="..\App.DAL.MySLQ\App.DAL.MSSQL.csproj" />
+		<ProjectReference Include="..\App.DAL.Postgres\App.DAL.Postgres.csproj" />
+		<ProjectReference Include="..\App.DAL.SqLite\App.DAL.SqLite.csproj" />
+		<ProjectReference Include="..\App.DAL\App.DAL.csproj" />
+		<ProjectReference Include="..\App.DDD.Domain.Base\App.DDD.Domain.Base.csproj" />
+		<ProjectReference Include="..\App.DDD.Domain\App.DDD.Domain.csproj" />
+		<ProjectReference Include="..\Common\Common.csproj" />
+		<ProjectReference Include="..\Data.Extensions\Data.Extensions.csproj" />
+		<ProjectReference Include="..\Extension.Base\Extension.Base.csproj" />
+		<ProjectReference Include="..\Interfaces.Base\Interfaces.Base.csproj" />
+		<ProjectReference Include="..\Interfaces\Interfaces.csproj" />
+	</ItemGroup>
 
 </Project>

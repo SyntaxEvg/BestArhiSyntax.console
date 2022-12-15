@@ -4,7 +4,7 @@ using Interfaces.Base;
 namespace App.DDD.Domain.Models
 {
 
-    public class OrderItem : Entity
+    public class OrderItem : EntityName
     {
 
         public virtual Orders Orders { get; set; }
