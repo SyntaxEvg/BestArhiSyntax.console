@@ -13,9 +13,6 @@ namespace App.Services.Services
         public async Task Consume(ConsumeContext<CommandMessageRequest> context)
         {
             var message = context.Message;
-            a++;
-            //await Console.Out.WriteLineAsync($"Message from Producer : {message.MessageString}");
-            // Do something useful with the message
         }
     }
 

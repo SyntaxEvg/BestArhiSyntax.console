@@ -8,6 +8,14 @@ using System.Threading.Tasks;
 
 namespace Interfaces.Base.Base
 {
+    public interface IServiceManagerBase
+    {
+        IlangDictionaryScopedService IlangDictionary { get; }
+
+    }
+
+
+
     /// <summary>
     /// Репозиторий для работы с сущностями можно использовать не только для БД, для БД создается менедждер репозитоия см. DAL
     /// </summary>

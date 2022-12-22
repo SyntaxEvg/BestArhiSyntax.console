@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace Interfaces.Base.Identity
     /// <typeparam name="TLoginDTO"></typeparam>
     /// <typeparam name="TRegDTO"></typeparam>
     /// <typeparam name="TResponseMessage">ResponseMessage возрат операции из  сервиса в контроллер</typeparam>
-    public interface IUserService<TLoginDTO, TRegDTO, TResponseMessage>
+    public interface IUserService<TLoginDTO, TRegDTO, TResponseMessage,TModelToken, TResponseTokens>
     {
         Task<TResponseMessage> RegisterUserAsync(TRegDTO userForRegistration);
         /// <summary>
@@ -22,10 +23,21 @@ namespace Interfaces.Base.Identity
         /// <returns></returns>
         Task<bool> AuthAndValidateUserAsync(TLoginDTO loginDto);
         /// <summary>
-        /// 
+        /// JWT token
         /// </summary>
         /// <returns></returns>
-        Task<TResponseMessage> CreateTokenAsync();
+        Task<TResponseTokens> CreateTokenAsync();
+
+
+        /// <summary>
+        /// возвращает Claim из маркера доступа JWT с истекшим сроком действия
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+
+
+      //  TResponseTokens GetSavedRefreshTokens(string username, string refreshToken);
+
         IEnumerable<TResponseMessage> GetAll();
         TResponseMessage GetById(TLoginDTO loginDto);
 
@@ -34,6 +46,8 @@ namespace Interfaces.Base.Identity
 
         Task<IList<string?>> GetRoleAsync(TLoginDTO loginDTO);
 
+        Task<TResponseMessage> RefreshToken(TModelToken tokenModel);
+        Task<TResponseMessage> CancelRefreshToken(string username);
         // await _signInManager.SignOutAsync();
 
     }

@@ -21,6 +21,12 @@ namespace App.DAL.Repositories.Base
         IEmployeesRepository employeesRepository { get; }
         IEmployeesRepository1 employeesRepository1 { get; }
         IEmployeesRepository2 employeesRepository2 { get; }
+        /// <summary>
+        /// Иногда в репозиториях очень не хватает  возрата контекста... метод возращает  контекст бд
+        /// </summary>
+        /// <returns></returns>
+        AppDBContext GetDb();
+        //UserManager GetUserManager();
 
         public Task<int> SaveChangesAsync();
 

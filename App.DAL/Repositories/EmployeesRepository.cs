@@ -21,13 +21,16 @@ namespace App.DAL.Repositories
         private EmployeesRepository _employeesRepository;
         private EmployeesRepository _departmentRepository;
         private EmployeesRepository _studentRepository;
-        UserManager<User> _userManager;
+        //UserManager<User> _userManager;
 
         public ManagerScopedRepository(AppDBContext db)
         {
             _db = db;
         }
-
+        public AppDBContext GetDb()
+        {
+            return _db;
+        }
         public IEmployeesRepository employeesRepository
         {
             get
@@ -78,6 +81,7 @@ namespace App.DAL.Repositories
             _db.Dispose();
         }
 
+      
     }
 
     public class EmployeesRepository : IEmployeesRepository, IEmployeesRepository1, IEmployeesRepository2

@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="MailKit" Version="3.4.3" />
+    <PackageReference Include="MimeKit" Version="3.4.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.3" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageReference Include="System.IO.Abstractions" Version="19.0.1" />
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Imlp\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\App.DDD.Domain.Base\App.DDD.Domain.Base.csproj" />
+    <ProjectReference Include="..\Extension.Base\Extension.Base.csproj" />
+  </ItemGroup>
+
+</Project>

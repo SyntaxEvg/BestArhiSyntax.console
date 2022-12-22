@@ -60,8 +60,8 @@ namespace App.Web.Api.Controllers
             service.Test();
             var trans =_lang.Get("welcome");
             await HttpContext.SignInAsync(
-    CookieAuthenticationDefaults.AuthenticationScheme,
-    HttpContext.User);
+                                CookieAuthenticationDefaults.AuthenticationScheme,
+                                HttpContext.User);
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),

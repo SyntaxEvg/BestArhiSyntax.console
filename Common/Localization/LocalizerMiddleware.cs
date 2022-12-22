@@ -35,9 +35,14 @@ namespace Common.Localization
             //var token = await HttpContext.GetTokenAsync("access_token");//получить  jwt token
             if (req.Method == "GET")
             {
-                cultureKey = context.Request.Query["culture"];
+                cultureKey = context.Request.Query["lang"];
                 _lang.Create(cultureKey);
                //context.Items.Add(cultureKey);//.Append(cultureKey);
+            }
+            else if (req.Method == "POST")
+            {
+                cultureKey = context.Request.Query["lang"];
+                _lang.Create(cultureKey);
             }
             var t = Thread.CurrentThread.CurrentCulture;
             _lang.Create("ru-RU");

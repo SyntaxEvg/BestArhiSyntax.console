@@ -1,17 +1,18 @@
 
+using App.DDD.Domain.Models;
+using App.Services.Services;
+using Common.Util;
 using Microsoft.AspNetCore.Mvc;
+using Polly;
+using Sender.Services.Services.SystemRX;
 
 namespace Web.SendMail.Apli.Controllers
 {
+    [ApiVersion("1.0")] //добавим бутафорию, чтобы показать,какая версия клиента используется в выз.методе
     [ApiController]
     [Route("[controller]")]
     public class SendMessageController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
         private readonly ILogger<SendMessageController> _logger;
 
         public SendMessageController(ILogger<SendMessageController> logger)
@@ -19,27 +20,16 @@ namespace Web.SendMail.Apli.Controllers
             _logger = logger;
         }
 
-        //[HttpGet]
-        //[Route("send")]
-        //public IEnumerable<WeatherForecast> send()
-        //{
-        //    public class CommandMessageConsumer : IConsumer<CommandMessage>
-        //{
-        //    public async Task Consume(ConsumeContext<CommandMessage> context)
-        //    {
-        //        var message = context.Message;
-        //        await Console.Out.WriteLineAsync($ "Message from Producer : {message.MessageString}");
-        //        // Do something useful with the message
-        //    }
-        //}
-
-        //    //return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        //    //{
-        //    //    Date = DateTime.Now.AddDays(index),
-        //    //    TemperatureC = Random.Shared.Next(-20, 55),
-        //    //    Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        //    //})
-        //    //.ToArray();
-        //}
+        [HttpPost]
+        [Route("SendMessage")]
+        public async Task<IActionResult> SendMessage(CommandMessageRequest commandMessage, string lang = "ru-RU")
+        {
+            if (SubscrubeMessage.subjectMail is not null)
+            {
+                //проверка трех полей,если они есть, создаем нового подписчика
+                SubscrubeMessage.subjectMail.OnNext(commandMessage);
+            }
+            return Ok(new ResponseMessage(true, "Message sent"));
+        }
     }
 }

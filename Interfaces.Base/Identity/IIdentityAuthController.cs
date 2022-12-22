@@ -25,13 +25,13 @@
         /// <param name="dTOLogin"></param>
         /// <returns></returns>
         Task<TIActionResult> Authenticate(DTOLogin dTOLogin);
-        /// <summary>
-        /// Иногда нужен для выдачи токена, при этом в системе быть не нужно, подходит для Web.Api,
-        /// метод опасный и требует контроля в реализации,если не понимаете, как с ним работать, лучше используйте Authenticate
-        /// </summary>
-        /// <param name="dTOLogin"></param>
-        /// <returns></returns>
-        Task<TIActionResult> CreateToken(DTOLogin dTOLogin);
+        ///// <summary>
+        ///// Иногда нужен для выдачи токена, при этом в системе быть не нужно, подходит для Web.Api,
+        ///// метод опасный и требует контроля в реализации,если не понимаете, как с ним работать, лучше используйте Authenticate
+        ///// </summary>
+        ///// <param name="dTOLogin"></param>
+        ///// <returns></returns>
+        //Task<TIActionResult> CreateToken(DTOLogin dTOLogin);
 
         /// <summary>
         /// Get Register запрос для отображения страницы

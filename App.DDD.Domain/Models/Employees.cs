@@ -2,10 +2,6 @@
 
 namespace App.DDD.Domain.Models
 {
-
-
-
-
     [Table("Employees")]
     public class Employees : EntityName
     {

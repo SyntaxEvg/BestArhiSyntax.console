@@ -1,4 +1,5 @@
 ﻿using App.DDD.Domain.Models;
+using Common.Util;
 using Interfaces.Base.Base;
 using MassTransit;
 using MassTransitAndRabbitMQ;
@@ -23,11 +24,11 @@ namespace App.Web.Api.Controllers
 
 
         [HttpPost]
-        [Route("sendmessage")]
-        public async Task<IActionResult> Sendmessage(CommandMessageRequest commandMessage)
+        [Route("SendMessage")]
+        public async Task<IActionResult> SendMessage(CommandMessageRequest commandMessage,string lang ="ru-RU" )
         {
             await sendMessageScopedService.Send(commandMessage);
-            return Ok(commandMessage);
+            return Ok(new ResponseMessage(true, "Message sent"));
         }
     }
 }

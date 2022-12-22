@@ -14,6 +14,12 @@ namespace App.DDD.Domain.Base.Security.JWT.Model
         public string Issuer { get; set; }
         public string Audience { get; set; }
         public string Key { get; set; }
-        public string TokenLifeTime { get; set; } = "3600";
+        public TimeSpan TokenLifeTime { get; set; } //= "3600";
+        /// <summary>
+        /// Время жизни обновл.токена
+        /// </summary>
+        public int RefreshTokenValidityInDays { get; set; } = 7;
+      //      "TokenValidityInMinutes": 1,
+  //  "RefreshTokenValidityInDays": 7
     }
 }

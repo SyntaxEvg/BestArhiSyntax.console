@@ -31,18 +31,23 @@ namespace App.DAL
         }
         /// <summary>
         /// removeBD -по умолчанию False(True полезно для отладки)
+        /// AutoMigrate -Автоматическая миграция, вместо  add-migration
         /// </summary>
         /// <param name="removeBD">конфиг True ,если требуется удалить бд !осторожно с этим параметром</param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public async Task InitializationAsync(bool removeBD =false,CancellationToken token = default)
+        public async Task InitializationAsync(bool removeBD =false,bool AutoMigrate =false, CancellationToken token = default)
         {
             if (removeBD)
             {
                 await RemoveAsync(token).ConfigureAwait(false);
             }
+            if (AutoMigrate)
+            {
+                await _db.Database.MigrateAsync();
+            }
             //накатываем миграции Автоматом применит все настройки 
-            await _db.Database.MigrateAsync();
+           
             //await AddInitialData(); Если класс закрытый прописываем при инициализации если нет. создать интрефейс и работать где надо...
         }
 

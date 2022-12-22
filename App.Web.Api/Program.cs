@@ -1,5 +1,8 @@
 #region using
 using App.DAL;
+using App.DAL.MySLQ;
+using App.DAL.Postgres;
+using App.DAL.SqLite;
 using App.DAL.Repositories;
 using App.DDD.Domain.Base.EntityBase;
 using App.DDD.Domain.Base.Security.JWT.Model;
@@ -27,7 +30,6 @@ using System.Reflection;
 using System.Text;
 using WatchDog;
 using WatchDog.src.Enums;
-//using WatchDog;
 #endregion
 
 internal class Program
@@ -37,7 +39,6 @@ internal class Program
         var builder = WebApplication.CreateBuilder(args);
         //builder.Logging.ClearProviders();
         builder.Logging.AddConsole();
-        //builder.Ho.Logging.AddConsole();
 
         var services = builder.Services;
 
@@ -50,7 +51,7 @@ internal class Program
 
         var app = builder.Build();
         using var scope = app.Services.CreateAsyncScope();
-        await scope.ServiceProvider.GetRequiredService<DBInitializer>().InitializationAsync();
+        await scope.ServiceProvider.GetRequiredService<DBInitializer>().InitializationAsync(AutoMigrate: true);
 
 
         app.LocalizationMiddleware();//для первода сайта или WebApi  Ставить выше авторизации!
@@ -64,8 +65,6 @@ internal class Program
         //}
         app.UseExceptionHandler("/Error");
         app.UseHsts();
-        //напиать свою мидлу которая будет  определять язык выбранного на сайте
-
         app.UseRouting(); //пути маршрута
         app.UseCors();
 
@@ -108,21 +107,20 @@ internal class Program
             switch (connectionType)
             {
                 case "SqlServer":
-                    services.AddDbContext<AppDBContext>(opt => opt.UseSqlServer(connection_string, o => o.MigrationsAssembly("App.DAL.MSSQL")));
+                    services.UseSqlServer(connection_string);
                     break;
                 case "Postgres":
-                    AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true); //Для работы с датой и временем в Postgres //https://www.npgsql.org/doc/types/datetime.html
-                    services.AddDbContext<AppDBContext>(opt => opt.UseNpgsql(connection_string, o => o.MigrationsAssembly("App.DAL.Postgres")));
-                    break;
+                    services.UseNpgsql(connection_string);
+                   break;
                 case "Sqlite":
-                    services.AddDbContext<AppDBContext>(opt => opt.UseSqlite(connection_string, o => o.MigrationsAssembly("App.DAL.SqLite")));
+                    services.UseSqlite(connection_string);
                     break;
                 default:
                     throw new InvalidOperationException($"Тип БД не поддерживается: {connectionType}");
 
             }
             ///Рецепт по Intialization миграции
-            ///перед каждей миграцией прописывать DBServer -тип кейса для миграции
+            ///перед каждей миграцией прописывать DBServer из appconfig -тип (switch)кейса для миграции
             //Add-Migration Initial -v Update-Database Terminal 
             //для каждой таблицы в проекте которая прописана в конфиге.выбираем проекты по умолчанию
 
@@ -151,7 +149,7 @@ internal class Program
             AddIOptions(services);
             AddCORS(services);
             AddRabbitMq(builder);
-
+            AddHttpClient(services);
             AddSwagger(services);//Конфигурация Swagger
             AddWathDog(services);//Просмотр запросов поступающий на сервер мини- RabbitMQ
             AddAuthentication(services);
@@ -163,7 +161,7 @@ internal class Program
             TryAddSingleton(services);
             AddHostedService(services);
 
-           
+
         }
 
 
@@ -195,10 +193,10 @@ internal class Program
             //BLL Services
             //ГАйд, чтобы автоматически зарегистрировать ваш контейнер в нужной области видимости укажите на конце класса сервиса 3 разных суфикса
             typeof(Program).Assembly.GetTypeFromAssembly(new List<string>()
-    {
-        "App.Services",//это названия перечесления сборок которые ссылаются на текущую, если они не указаны,произойдет поиск только в запускаемой сборке,так можно но не правильно
-        "App.DAL",
-    }).RegistrationAutoOrManual(services);
+            {
+                "App.Services",//это названия перечесления сборок которые ссылаются на текущую, если они не указаны,произойдет поиск только в запускаемой сборке,так можно но не правильно
+                "App.DAL",
+            }).RegistrationAutoOrManual(services);
             //typeof(Program).Assembly.GetTypeFromAssembly().RegistrationAutoOrManual(services);
 
             //так же можно сделаь ручную регистрацию с более глубокой настройкой, пожалуйста используйте TryAdd 
@@ -211,6 +209,7 @@ internal class Program
             services.AddSwaggerGen(option =>
             {
                 option.SwaggerDoc("v1", new OpenApiInfo { Title = "REST API", Version = "v1" }); // то чтовидно как переходим на страницу в sw
+                //option.ParameterFilter
                 option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
@@ -220,19 +219,26 @@ internal class Program
                     BearerFormat = "JWT",
                     Scheme = "Bearer"
                 });
+                //option.ParameterFilter(new OpenApiParameter()
+                //{
+                //    Name = "X-Transaction-Id",
+                //    In = ParameterLocation.Header,
+                //    Required = true,
+                //    AllowEmptyValue = false,
+                //    Description = "Transaction Id to track the issue"
+                //});
                 option.AddSecurityRequirement(new OpenApiSecurityRequirement{
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
                 {
-                    Type=ReferenceType.SecurityScheme,
-                    Id="Bearer"
-                }
-            },
-            new string[]{}
-        }
-                });
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type=ReferenceType.SecurityScheme,
+                            Id="Bearer"
+                        }
+                    },
+                    new string[]{}
+                }});;
             });
 
 
@@ -272,13 +278,13 @@ internal class Program
                 opt.Cookie.Name = "App.Web"; //имя куки
                 opt.Cookie.HttpOnly = false; // Значение true, если файл cookie не должен быть доступен клиентским скриптом; в противном случае — значение false.
                                              //opt.Cookie.Expiration =TimeSpan.FromDays(10);// через  10 дней кука протухает и данные потеряют актуальность
-                //opt.ExpireTimeSpan = TimeSpan.FromDays(10);// через  10 дней кука протухает и данные потеряют актуальность
+                                             //opt.ExpireTimeSpan = TimeSpan.FromDays(10);// через  10 дней кука протухает и данные потеряют актуальность
                 opt.LoginPath = "/Account/Login";  //страница авторизации 
                 opt.LogoutPath = "/Account/Logout";  //страница авторизации 
                 opt.AccessDeniedPath = "/Account/AccessDenied";  //перенаправить если доступ запрещен
                 opt.SlidingExpiration = true;//менять id анонимным юзерам сайта,которые гуляли по нему до момента регистрации
             });
-            services.ConfigureJWT(builder.Configuration,new TimeSpan(0,30,0));// требуется сборка Identity
+            services.ConfigureJWT(builder.Configuration);// требуется сборка Identit/
 
 
 
@@ -304,6 +310,13 @@ internal class Program
         }
     }
 
+    private static void AddHttpClient(IServiceCollection services)
+    {
+        //services.AddHttpClient("MyApiService").AddPolicyHandler(HttpPolicies.ExponentialRetry)
+        //                                      .AddPolicyHandler(HttpPolicies.CircuitBreaker);
+
+    }
+
     /// <summary>
     /// Подключение Rabbit и MassTransit
     /// </summary>
@@ -315,6 +328,6 @@ internal class Program
         services.ConfigureRabbitMqAndMassTransit(builder.Configuration);
 
 
-       
+
     }
 }

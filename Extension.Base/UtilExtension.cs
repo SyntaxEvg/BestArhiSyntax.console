@@ -84,5 +84,26 @@ namespace Extension.Base
                 return null;
             }
         }
+        /// <summary>
+        /// Конвертирует строку в stream
+        /// </summary>
+        /// <param name="base64"></param>
+        /// <returns></returns>
+        public static Stream? Base64ToStream(this string base64)
+        {
+            try
+            {
+                return new MemoryStream(Convert.FromBase64String(base64));
+            }
+            
+            catch (Exception)
+            {
+
+                return null; 
+            }
+           
+        }
+
+
     }
 }

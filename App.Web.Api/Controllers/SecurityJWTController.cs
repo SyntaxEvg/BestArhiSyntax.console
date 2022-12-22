@@ -1,4 +1,6 @@
-﻿using App.DDD.Domain.Base.Identity.Model.DTO;
+﻿using App.DDD.Domain.Base.Identity;
+using App.DDD.Domain.Base.Identity.Model.DTO;
+using App.DDD.Domain.Models;
 using App.DDD.Domain.Models.Authentication;
 using App.Web.Api.Controllers.Base;
 using Common.Util;
@@ -6,6 +8,7 @@ using Interfaces.Base.Base;
 using Interfaces.Base.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace App.Web.Api.Controllers
@@ -18,11 +21,11 @@ namespace App.Web.Api.Controllers
     public class AuthController : ControllerBase, IIdentityAuthController<UserLoginDto, UserRegistrationDto, UserLoginDto, UserLoginDto, IActionResult>
     {
         private readonly ILogger<AuthController> _logger;
-        private readonly IUserService<UserLoginDto, UserRegistrationDto, ResponseMessage> _userService;
+        private readonly IUserService<UserLoginDto, UserRegistrationDto, ResponseMessage, TokenModel,ResponseTokens> _userService;
         private readonly IlangDictionaryScopedService _lang;
 
         public AuthController(ILogger<AuthController> logger, 
-            IUserService<UserLoginDto, UserRegistrationDto, ResponseMessage> userService,
+            IUserService<UserLoginDto, UserRegistrationDto, ResponseMessage, TokenModel, ResponseTokens> userService,
             IlangDictionaryScopedService lang)
         {
             this._logger = logger;
@@ -37,18 +40,19 @@ namespace App.Web.Api.Controllers
            ? Unauthorized()
            : Ok(new { Token = await _userService.CreateTokenAsync() });
         }
-        [HttpPost]
-        [Route("CreateToken")]
-        public async Task<IActionResult> CreateToken(UserLoginDto dTOLogin)
-        {
-            return Ok(new { Token = await _userService.CreateTokenAsync() });
-        }
+    
         [HttpGet]
         [Route("Register")]
         public Task<IActionResult> Register(string returnUrl)
         {
             throw new NotImplementedException();
         }
+       
+        /// <summary>
+        /// После регистрация необходимо авторизоваться
+        /// </summary>
+        /// <param name="dTOregistration"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("Register")]
       //  [ValidateModelAttribute]
@@ -89,45 +93,46 @@ namespace App.Web.Api.Controllers
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Метод испоьзуется когда JWT токен устарел,и нужна получить новый для использования Авторизованного Api
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("refresh")]
+        public async Task<IActionResult> Refresh(TokenModel token)
+        {
+            var userResult = await _userService.RefreshToken(token);// tokenModel)(dTOregistration);
+
+            return Ok(userResult.Body);
+        }
+
+
+        /// <summary>
+        /// Админский параметр, сбрасывает один или все ТокеныОбновления
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        //[Authorize]
+        [HttpPost]
+        [Route("cancelRefreshToken")]
+        public async Task<IActionResult> CancelRefreshToken(string username = "null")
+        {
+            if (username == "null") //костыль для свагера, который не умеет рабоать с опцинальным параметром
+            {
+                username = null;
+            }
+            var userResult = await _userService.CancelRefreshToken(username);// tokenModel)(dTOregistration);
+            return Ok(userResult);
+          
+
+            return NoContent();
+        }
     }
 
 
 
-    //public class SecurityJWTController : BaseController<SecurityJWTController>
-    //{
-    //    public SecurityJWTController(ILogger<SecurityJWTController> logger, IlangDictionaryScopedService lang) : base(logger, lang) { }
-
-    //    [AllowAnonymous]
-    //    //[HttpPost(Name = "createToken")]
-    //    [HttpPost]
-    //    [Route("api/createToken")]
-    //    public IActionResult CreateToken([FromServices] IUserService<AccountDTO, ResponseMessage> userServiceJWT, AccountDTO account )
-    //    {
-    //        var res = userServiceJWT.Authenticate(account);
-    //        if (res.Success)
-    //        {
-    //            return Ok(res);
-    //        }
-    //        return Unauthorized();
-    //    } 
-        
-
-
-        
-    //    [HttpGet]
-    //    [Route("api/get")]        
-    //    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    //    [Authorize(Roles = "Admin,User")]//User
-    //    public IActionResult get()
-    //    {
-    //        return Ok("hi");
-    //        //var res = userServiceJWT.Authenticate(account);
-    //        //if (res.Success)
-    //        //{
-    //        //    return Ok(res);
-    //        //}
-    //        //return Unauthorized();
-    //    }
-
-    //}
+   
 }
