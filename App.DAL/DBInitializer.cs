@@ -44,7 +44,7 @@ namespace App.DAL
             }
             if (AutoMigrate)
             {
-                await _db.Database.MigrateAsync();
+                //await _db.Database.MigrateAsync();
             }
             //накатываем миграции Автоматом применит все настройки 
            

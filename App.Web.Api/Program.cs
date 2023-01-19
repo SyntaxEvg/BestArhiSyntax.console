@@ -283,6 +283,22 @@ internal class Program
                 opt.LogoutPath = "/Account/Logout";  //страница авторизации 
                 opt.AccessDeniedPath = "/Account/AccessDenied";  //перенаправить если доступ запрещен
                 opt.SlidingExpiration = true;//менять id анонимным юзерам сайта,которые гуляли по нему до момента регистрации
+                opt.Events = new Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationEvents()
+                {//события срабатывают при входе в систему валидации и т.д
+                    OnSignedIn = async cont => //тут разбираем то что происход  в черном ящике аунтиф по кукам 
+                    {
+                        await Task.CompletedTask;
+                    },
+                    OnSigningIn = async cont =>
+                    {
+                        await Task.CompletedTask;
+                    },
+                    OnValidatePrincipal = async cont =>
+                    {
+                        await Task.CompletedTask;
+                    },
+
+                };
             });
             services.ConfigureJWT(builder.Configuration);// требуется сборка Identit/
 

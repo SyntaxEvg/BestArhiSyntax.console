@@ -13,7 +13,7 @@ namespace Common.Util
     /// </summary>
     public record ResponseMessage
     {
-        public ResponseMessage(bool success, string message =null, object? body =null)
+        public ResponseMessage(bool success, string message = null, object? body =null)
         {
             Success = success;
             Message = message;

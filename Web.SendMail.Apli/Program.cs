@@ -13,22 +13,15 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         ConfigurationsService(builder);
-
-
-        
         var app = builder.Build();
-
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
         app.UseAuthorization();
-
         app.MapControllers();
-
         app.Run();
     }
 
@@ -37,7 +30,6 @@ internal class Program
         var services =builder.Services;
         var configuration = builder.Configuration;
         builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         services.AddHttpClient("MyApiService").AddPolicyHandler(HttpPolicies.ExponentialRetry)
@@ -48,9 +40,6 @@ internal class Program
         var Uri = builder.Configuration["RabbitMqSettings:Uri"];
         var UserName = builder.Configuration["RabbitMqSettings:UserName"];
         var Password = builder.Configuration["RabbitMqSettings:Password"];
-
-
-
 
         builder.Services.AddMassTransit(mt =>
         {
@@ -73,8 +62,6 @@ internal class Program
                         if (SubscrubeMessage.subjectMail is not null)
                         {
                             //проверка трех полей,если они есть, создаем нового подписчика
-
-
                             SubscrubeMessage.subjectMail.OnNext(context.Message);
                         }
                        

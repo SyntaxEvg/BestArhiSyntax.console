@@ -73,7 +73,7 @@ namespace App.DDD.Domain.Models
     /// <summary>
     /// для отправки ответа на Шину или REST API
     /// </summary>
-    public class CommandMessageResponse
+    public record CommandMessageResponse
     {
         public Guid id { get; init; }
         public bool Status { get; init; }

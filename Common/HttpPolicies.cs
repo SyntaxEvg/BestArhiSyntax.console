@@ -18,8 +18,6 @@ namespace Common
 
         /// <summary>
         /// Set a limit on the number of transactions per second.
-        /// <seealso href="https://github.com/App-vNext/Polly/wiki/Rate-Limit#rate-limit-v723-onwards"/>
-        /// <seealso href="https://github.com/App-vNext/Polly/blob/master/README.md#rate-limit"/>
         /// </summary>
         public static readonly IAsyncPolicy<HttpResponseMessage> RateLimit =
             Policy.RateLimitAsync(numberOfExecutions: _maxRequestsBeforeCutoff, _rateLimitTimeWindow, maxBurst: _maxRequestsBeforeCutoff)

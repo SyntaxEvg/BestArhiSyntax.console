@@ -52,4 +52,19 @@ namespace Interfaces.Base
         /// </summary>
         public string AttachFile { get; set; }
     }
+    public class test : ICommandMessageRequest
+    {
+        public Guid id { get => throw new NotImplementedException(); init => throw new NotImplementedException(); }
+        public string? password { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string? SmtpHost { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string? SmtpPort { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string? From { get => throw new NotImplementedException(); init => throw new NotImplementedException(); }
+        public string To { get => throw new NotImplementedException(); init => throw new NotImplementedException(); }
+        public string Bcc { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string Subject { get => throw new NotImplementedException(); init => throw new NotImplementedException(); }
+        public string BodyHtml { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string Cc { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string NameFile { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string AttachFile { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    }
 }
