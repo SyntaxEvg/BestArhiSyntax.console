@@ -93,7 +93,12 @@ namespace Extension.Base
         {
             try
             {
-                return new MemoryStream(Convert.FromBase64String(base64));
+                if (base64 is not null && base64.Length >20)
+                {
+                    return new MemoryStream(Convert.FromBase64String(base64));
+                }
+                return null;
+
             }
             
             catch (Exception)

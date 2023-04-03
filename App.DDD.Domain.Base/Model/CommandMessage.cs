@@ -6,17 +6,17 @@ namespace App.DDD.Domain.Models
     public class CommandMessageRequest : ICommandMessageRequest
     {
 
-        public Guid id { get; init; } = Guid.NewGuid();
+        public Guid id { get; set; } = Guid.NewGuid();
         /// <summary>
         /// От кого сообщение
         /// </summary>
-        [Required]
-        public string From { get; init; } //так как проектов может быть много, отсылать письма надо с разных, этот параметр будет обязательный
+        //[Required]
+        public string? From { get; set; } //так как проектов может быть много, отсылать письма надо с разных, этот параметр будет обязательный
         /// <summary>
         /// Кому сообщение, может  быть строкой разделенной SPLIIT(';')
         /// </summary>
         [Required]
-        public string To { get; init; }
+        public string To { get; set; }
         /// <summary>
         /// Получатели в списке Blind-Carpbon-Copy не будут видны другие получатели сообщения
         /// </summary>
@@ -25,14 +25,12 @@ namespace App.DDD.Domain.Models
         /// <summary>
         /// Тема обычно представляет собой короткую строку, обозначающую тему сообщения
         /// </summary>
-        public string Subject { get; init; } = "Re:";
+        public string? Subject { get; set; } = "Re:";
 
         /// <summary>
         /// Получает текст сообщения в формате HTML, если он существует
         /// </summary>
         public string? BodyHtml { get; set; } = "<h3>Hello</h3>";
-
-
 
         /// <summary>
         /// Добавляем получателей копии к электронному письму.
@@ -45,7 +43,7 @@ namespace App.DDD.Domain.Models
         /// <summary>
         /// Имя файла,которое вы вложили
         /// </summary>
-        public string NameFile { get; set; } = "test";
+        public string? NameFile { get; set; } = "test";
 
         /// <summary>
         /// Добавить файл,проверит,не битый ли он, отравлять в ,base64

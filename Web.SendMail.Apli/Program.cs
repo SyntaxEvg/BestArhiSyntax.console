@@ -35,49 +35,48 @@ internal class Program
         services.AddHttpClient("MyApiService").AddPolicyHandler(HttpPolicies.ExponentialRetry)
                                               .AddPolicyHandler(HttpPolicies.CircuitBreaker);
 
-        services.AddEmailSender(configuration); //Подключения сервиса одной Отправки почты одной строчкой
+        services.AddEmailSender(configuration); //Подключения сервиса  отправки почты
+        //var Uri = builder.Configuration["RabbitMqSettings:Uri"];
+        //var UserName = builder.Configuration["RabbitMqSettings:UserName"];
+        //var Password = builder.Configuration["RabbitMqSettings:Password"];
 
-        var Uri = builder.Configuration["RabbitMqSettings:Uri"];
-        var UserName = builder.Configuration["RabbitMqSettings:UserName"];
-        var Password = builder.Configuration["RabbitMqSettings:Password"];
-
-        builder.Services.AddMassTransit(mt =>
-        {
-            mt.UsingRabbitMq((cntxt, cfg) =>
-            {
-                cfg.Host(new Uri(Uri), c =>
-                {
-                    c.Username(UserName);
-                    c.Password(Password);
-                });
-                //cfg.ReceiveEndpoint("SendMail", (c) => { //в rabbit  отобразиться это имя, создано для понимая,кто  Я подписчик )))
-                //                                         //cfg.ReceiveEndpoint(new TemporaryEndpointDefinition(), (c) => { /Некоторым потребителям нужно получать сообщения только при подключении, и любые сообщения, опубликованные при отключении, следует отбрасывать
-                //c.Consumer<ReceiverMessageService>();
-                //});
-                cfg.ReceiveEndpoint("SendMail", e =>
-                {
-                    e.Handler<CommandMessageRequest>(async context => //простой обработчик который кладет в очередь  сообщения
-                    {
-                        //SendMailQueue.Receive(context.Message);
-                        if (SubscrubeMessage.subjectMail is not null)
-                        {
-                            //проверка трех полей,если они есть, создаем нового подписчика
-                            SubscrubeMessage.subjectMail.OnNext(context.Message);
-                        }
+        //builder.Services.AddMassTransit(mt =>
+        //{
+        //    mt.UsingRabbitMq((cntxt, cfg) =>
+        //    {
+        //        cfg.Host(new Uri(Uri), c =>
+        //        {
+        //            c.Username(UserName);
+        //            c.Password(Password);
+        //        });
+        //        //cfg.ReceiveEndpoint("SendMail", (c) => { //в rabbit  отобразиться это имя, создано для понимая,кто  Я подписчик )))
+        //        //                                         //cfg.ReceiveEndpoint(new TemporaryEndpointDefinition(), (c) => { /Некоторым потребителям нужно получать сообщения только при подключении, и любые сообщения, опубликованные при отключении, следует отбрасывать
+        //        //c.Consumer<ReceiverMessageService>();
+        //        //});
+        //        cfg.ReceiveEndpoint("SendMail", e =>
+        //        {
+        //            e.Handler<CommandMessageRequest>(async context => //простой обработчик который кладет в очередь  сообщения
+        //            {
+        //                //SendMailQueue.Receive(context.Message);
+        //                if (SubscrubeMessage.subjectMail is not null)
+        //                {
+        //                    //проверка трех полей,если они есть, создаем нового подписчика
+        //                    SubscrubeMessage.subjectMail.OnNext(context.Message);
+        //                }
                        
-                        await context.RespondAsync<CommandMessageResponse>(new { context.Message.id, status = true }).ConfigureAwait(false);
-                        // await Console.Out.WriteLineAsync($"Submit Order Received: {context.Message}");
-                    });
-                    // e.ad
-                });
+        //                await context.RespondAsync<CommandMessageResponse>(new { context.Message.id, status = true }).ConfigureAwait(false);
+        //                // await Console.Out.WriteLineAsync($"Submit Order Received: {context.Message}");
+        //            });
+        //            // e.ad
+        //        });
 
-                // cfg.ConfigureEndpoints(cntxt);
-                //
+        //        // cfg.ConfigureEndpoints(cntxt);
+        //        //
 
 
-            });
-            mt.AddRequestClient<CommandMessageResponse>(new Uri("exchange:Test"));
-        });
+        //    });
+        //    mt.AddRequestClient<CommandMessageResponse>(new Uri("exchange:Test"));
+        //});
             // AddHostedService(builder.Services);
     }
 

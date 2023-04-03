@@ -21,8 +21,8 @@ namespace Web.SendMail.Apli.Controllers
         }
 
         [HttpPost]
-        [Route("SendMessage")]
-        public async Task<IActionResult> SendMessage(CommandMessageRequest commandMessage, string lang = "ru-RU")
+        [Route("message")]
+        public async Task<IActionResult> message(CommandMessageRequest commandMessage, string lang = "ru-RU")
         {
             if (SubscrubeMessage.subjectMail is not null)
             {

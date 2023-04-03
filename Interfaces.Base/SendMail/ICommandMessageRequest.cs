@@ -4,7 +4,7 @@ namespace Interfaces.Base
 {
     public interface ICommandMessageRequest
     {
-        public Guid id { get; init; }
+        public Guid id { get; set; }
 
         /// <summary>
         /// Пароль,если подключение не стандартное
@@ -16,11 +16,11 @@ namespace Interfaces.Base
         /// <summary>
         /// От кого сообщение
         /// </summary>
-        public string? From { get; init; } //так как проектов может быть много, отсылать письма надо  с разных, этот параметр будет обязательный
+        public string? From { get; set; } //так как проектов может быть много, отсылать письма надо  с разных, этот параметр будет обязательный
         /// <summary>
         /// Кому сообщение, может  быть  массивом SPLIT(';')
         /// </summary>
-        public string To { get; init; }
+        public string To { get; set; }
         /// <summary>
         /// Получатели в списке Blind-Carpbon-Copy не будут видны другие получатели сообщения
         /// </summary>
@@ -29,7 +29,7 @@ namespace Interfaces.Base
         /// <summary>
         /// Тема обычно представляет собой короткую строку, обозначающую тему сообщения. 
         /// </summary>
-        public string Subject { get; init; } 
+        public string Subject { get; set; } 
 
         /// <summary>
         /// Получает текст сообщения в формате HTML, если он существует.
@@ -54,17 +54,18 @@ namespace Interfaces.Base
     }
     public class test : ICommandMessageRequest
     {
-        public Guid id { get => throw new NotImplementedException(); init => throw new NotImplementedException(); }
-        public string? password { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string? SmtpHost { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string? SmtpPort { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string? From { get => throw new NotImplementedException(); init => throw new NotImplementedException(); }
-        public string To { get => throw new NotImplementedException(); init => throw new NotImplementedException(); }
-        public string Bcc { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string Subject { get => throw new NotImplementedException(); init => throw new NotImplementedException(); }
-        public string BodyHtml { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string Cc { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string NameFile { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string AttachFile { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public Guid id {get; set;}
+        public string? password {get; set;}
+        public string? SmtpHost {get; set;}
+        public string? SmtpPort {get; set;}
+        public string? From {get; set;}
+        public string To {get; set;}
+        public string Bcc {get; set;}
+        public string Subject {get; set;}
+        public string BodyHtml {get; set;}
+        public string Cc {get; set;}
+        public string NameFile {get; set;}
+        public string AttachFile {get; set;}
     }
 }

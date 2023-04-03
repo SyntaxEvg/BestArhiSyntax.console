@@ -12,15 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHealthChecks();
 builder.Services.AddControllers();
 var url =builder.Configuration["Consul:clientAddress"];
-builder.Services.AddConsulConfig(configKey: url);
-builder.Services.AddSingleton<IConsulClient, ConsulClient>(p => new
-ConsulClient(consulConfig =>
-{
-    consulConfig.Address = new Uri(url);
-    consulConfig.Datacenter ="TestDC";
-    //consulConfig.Token = "X-Consul-Token";
-}));
-
+builder.Services.UseConul(url, "TestDC");
 
 var IP =builder.Configuration["serviceInfo:ip"];
 var port =builder.Configuration["serviceInfo:port"];
@@ -29,7 +21,6 @@ var urlsUse = $"http://{IP}:{port}";
 
 builder.WebHost.UseUrls(urlsUse);
 
-//builder.Services.AddServiceDiscovery();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -39,7 +30,6 @@ AddHostedService(builder.Services);
 
 var AdressHealt = builder.Configuration["serviceInfo:healthCheckAddress"];
 var app = builder.Build();
-app.UseHealthChecks(AdressHealt);
 app.UseHealthChecks(AdressHealt);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -57,5 +47,5 @@ app.Run();
 
 void AddHostedService(IServiceCollection services)
 {
-    services.AddHostedService<RegisterConsulHostedService>();
+    
 }

@@ -81,7 +81,7 @@ namespace Sender.Services.Events
         {
         }
 
-        public  void OnNext(CommandMessageRequest value)
+        public void OnNext(CommandMessageRequest value)
         {
            
             bool newConncet = value.password is not null && (value.From is not null && value.From.Contains("@")) && value.SmtpHost is not null;

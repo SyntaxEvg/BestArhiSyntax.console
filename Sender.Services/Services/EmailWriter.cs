@@ -95,7 +95,11 @@ namespace Sender.Services.Services
         public IEmailWriter Cc(string addresses)
         {
             var mailboxAddresses = addresses.ParseEmailContacts();
-            _mimeMessage.Cc.AddRange(mailboxAddresses);
+            if (addresses != null && addresses.Contains("@"))
+            {
+                _mimeMessage.Cc.AddRange(mailboxAddresses);
+            }
+           
             return this;
         }
 
@@ -107,8 +111,11 @@ namespace Sender.Services.Services
 
         public IEmailWriter Bcc(string addresses)
         {
-            var mailboxAddresses = addresses.ParseEmailContacts();
-            _mimeMessage.Bcc.AddRange(mailboxAddresses);
+            if (addresses !=null && addresses.Contains("@"))
+            {
+                var mailboxAddresses = addresses.ParseEmailContacts();
+                _mimeMessage.Bcc.AddRange(mailboxAddresses);
+            }
             return this;
         }
 
