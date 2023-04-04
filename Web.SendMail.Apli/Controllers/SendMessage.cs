@@ -1,6 +1,6 @@
 
 using App.DDD.Domain.Models;
-using App.Services.Services;
+//using App.Services.Services;
 using Common.Util;
 using Microsoft.AspNetCore.Mvc;
 using Polly;
@@ -22,7 +22,7 @@ namespace Web.SendMail.Apli.Controllers
 
         [HttpPost]
         [Route("message")]
-        public async Task<IActionResult> message(CommandMessageRequest commandMessage, string lang = "ru-RU")
+        public async Task<IActionResult> message(CommandMessageRequest commandMessage, string lang = "ru-RU")                                    
         {
             if (SubscrubeMessage.subjectMail is not null)
             {

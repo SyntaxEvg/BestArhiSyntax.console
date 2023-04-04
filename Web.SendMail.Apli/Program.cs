@@ -2,7 +2,7 @@ using App.DDD.Domain.Models;
 using App.Services.Services;
 using Common;
 using MassTransit;
-using MassTransitAndRabbitMQ;
+//using MassTransitAndRabbitMQ;
 using Sender.Services.Sender;
 using Sender.Services.Services;
 using Sender.Services.Services.SystemRX;

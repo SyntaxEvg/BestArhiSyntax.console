@@ -23,11 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\App.DDD.Domain.Base\App.DDD.Domain.Base.csproj" />
     <ProjectReference Include="..\App.Services\App.Services.csproj" />
     <ProjectReference Include="..\Common\Common.csproj" />
-    <ProjectReference Include="..\Interfaces.Base\Interfaces.Base.csproj" />
-    <ProjectReference Include="..\MassTransitAndRabbitMQ\MassTransitAndRabbitMQ.csproj" />
     <ProjectReference Include="..\Sender.Services\Sender.Services.csproj" />
   </ItemGroup>
 
