@@ -44,7 +44,7 @@ namespace Common.Localization
                 cultureKey = context.Request.Query["lang"];
                 _lang.Create(cultureKey);
             }
-            var t = Thread.CurrentThread.CurrentCulture;
+           // var t = Thread.CurrentThread.CurrentCulture;
             _lang.Create("ru-RU");
             //if (!string.IsNullOrEmpty(cultureKey))
             //{
