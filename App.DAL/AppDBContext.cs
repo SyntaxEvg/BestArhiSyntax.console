@@ -19,7 +19,7 @@ namespace App.DAL
         public virtual DbSet<User> User { get; set; }
         //public virtual DbSet<UsersSession> UsersSession { get; set; }
         //public virtual DbSet<UserRefreshTokens> UserRefreshToken { get; set; }
-
+        //https://stackoverflow.com/questions/28435734/how-to-get-a-list-of-all-routes-in-asp-net-core
 
         public AppDBContext(DbContextOptions<AppDBContext> opt) : base(opt)
         {
